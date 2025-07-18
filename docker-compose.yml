@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  django:
+    build: .
+    container_name: brain_challenge_django
+    command: >
+      sh -c "
+      sleep 10 &&
+      python manage.py migrate &&
+      echo \"from django.contrib.auth import get_user_model;
+      User = get_user_model();
+      User.objects.filter(username='admin').exists() or
+      User.objects.create_superuser('admin', 'admin@example.com', 'admin123')\" | python manage.py shell &&
+      gunicorn brain_backend.wsgi:application --bind 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    env_file:
+      - .env
+    environment:
+      - DJANGO_SETTINGS_MODULE=brain_backend.settings
+      - PYTHONPATH=/app
+
+  db:
+    image: postgres:15-alpine
+    container_name: brain_challenge_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+volumes:
+  postgres_data:
