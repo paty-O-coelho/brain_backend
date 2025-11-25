@@ -53,3 +53,10 @@ API RESTful desenvolvida com **Django** e **Django REST Framework** para cadastr
 - Safras únicas – um ano de safra só pode ser cadastrado uma vez.
 
 - Culturas duplicadas – impede registros duplicados de mesma cultura por fazenda e safra.
+
+
+---
+
+## ▶️ Imagem do Swagger em produçao
+<img width="1760" height="970" alt="image" src="https://github.com/user-attachments/assets/85bdf73b-58fd-40d0-8674-fca93bb158ba" />
+
